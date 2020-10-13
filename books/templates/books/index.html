@@ -1,0 +1,18 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+        <H3><center>Welcome, This is a great place to track your daily activity</center></H3>
+        <div class="row">
+            <div class="col-md-10">
+                <img src="https://www.mathworks.com/help/examples/graphics/win64/OverlayBarGraphsExample_01.png">
+            </div>
+            <div class="col-md-2">
+                New to the Website,
+                <a href="{% url 'register' %}"> sign up </a>
+                 <br>
+                Already a member?
+                <a href="{% url 'login' %}"> sign in </a>
+            </div>
+        </div>
+
+{% endblock %}
