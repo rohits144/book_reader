@@ -2,7 +2,8 @@
 
 {% block content %}
 
- <h2> Hi {{user.username}}, welcome to your profile </h2>
-
+ <h2> Hi {{user.username}}, welcome to your profile. <br></h2>
+<p> Start adding books that you are reading by clicking Add Book below</p>
+<a href="{% url 'add_book' %}"> Add Book </a>
 
 {% endblock %}

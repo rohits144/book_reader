@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import RegistrationForm
+from .forms import RegistrationForm, AddBookForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import reverse, redirect
 from django.core.exceptions import ValidationError
@@ -33,3 +33,18 @@ def profile(request):
         return render(request, template_name='books/profile.html', context={'user': request.user})
     else:
         return HttpResponseRedirect(redirect_to=reverse('login'))
+
+
+def add_book(request):
+    if request.method == 'GET':
+        logger.info('Get request to display Add book form')
+        form = AddBookForm()
+        return render(request, template_name='books/add_book.html', context={'form': form})
+    elif request.method == 'POST':
+        logger.info('Post method called to submit form')
+        form = AddBookForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(redirect_to=reverse('profile'))
+        else:
+            return HttpResponseRedirect(redirect_to=reverse('add_book'))
