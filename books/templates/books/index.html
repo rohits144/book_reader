@@ -1,10 +1,16 @@
 {% extends "books/base.html" %}
 
 {% block content %}
-        <H3><center>Welcome, This is a great place to track your daily activity</center></H3>
+        <H3><center>Welcome, This is a great place to track your daily Book Reading activity</center></H3>
         <div class="row">
             <div class="col-md-10">
-                <img src="https://www.mathworks.com/help/examples/graphics/win64/OverlayBarGraphsExample_01.png">
+                <marquee behavior="alternate">
+                <img src="https://visualhunt.com/photos/2/eyeglasses-on-open-book.jpg?s=s" width="500", height="400" />
+                <img src = "https://images.theconversation.com/files/45159/original/rptgtpxd-1396254731.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1356&h=668&fit=crop" width="500", height="400"/>
+                <img src="https://images.ctfassets.net/cnu0m8re1exe/4KwrJVfCGeyOKwm8PS2tjI/30026753d97e3b41a50560063126ded8/shutterstock_135114548.jpg?w=650&h=433&fit=fill" width="500", height="400"/>
+
+
+                </marquee >
             </div>
             <div class="col-md-2">
                 New to the Website,
@@ -13,6 +19,10 @@
                 Already a member?
                 <a href="{% url 'login' %}"> sign in </a>
             </div>
+        </div>
+        <br>
+        <div class="container-fluid">
+            <p class="lead text-center">Get stats about your Ready with graphs, Keep track of your daily Monthly and yearly reading </p>
         </div>
 
 {% endblock %}

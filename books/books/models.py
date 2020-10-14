@@ -20,7 +20,7 @@ class Book(models.Model):
     title = models.CharField(max_length=30)
     book_image = models.ImageField(upload_to='image/', verbose_name='book image', width_field=100, height_field=100, blank=True)
     total_pages = models.PositiveIntegerField(verbose_name='Total number of pages in book', editable=True, blank=True,)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, blank=True, null=True)
+    author = models.ManyToManyField(Author)
     genre = models.CharField(max_length=20, blank=True)
     language = models.CharField(max_length=20, blank=True)
     status = models.CharField(max_length=100, choices=(('Want to read', 'Not started'), ('Currently reading', 'Reading'), ('Completed reading', 'Completed')))
