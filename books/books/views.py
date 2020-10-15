@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from .forms import RegistrationForm, AddBookForm
 from django.http import HttpResponseRedirect
-from django.shortcuts import reverse, redirect
-from django.core.exceptions import ValidationError
+from django.shortcuts import reverse
 import logging
 
 logger = logging.getLogger('__name__')
@@ -44,7 +43,10 @@ def add_book(request):
         logger.info('Post method called to submit form')
         form = AddBookForm(request.POST)
         if form.is_valid():
-            form.save()
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
             return HttpResponseRedirect(redirect_to=reverse('profile'))
         else:
+            logger.error("Error in form {}".format(form.errors))
             return HttpResponseRedirect(redirect_to=reverse('add_book'))
