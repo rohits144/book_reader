@@ -4,12 +4,40 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 
+<br>
+   <center>
+           <a href="/"> Visit homepage </a>
+   </center>
+<hr>
+
+{% if messages %}
+    <ul class="messages">
+          {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}<p class="text-danger" >Warning: </p>{% endif %}
+                            {{ message }}
+                </li>
+          {% endfor %}
+    </ul>
+{% endif %}
+
+
 <div class="container emp-profile">
-            <form method="post">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="profile-img">
-                            <img src="{{user.profile.display_pic.url}}" alt="profile picture" height="200" width="180"/>
+                            {% if user.profile.display_pic%}
+                                <img src="{{user.profile.display_pic.url}}" alt="profile picture" height="200" width="170"/>
+                            {% else %}
+                                <img src="{{'/static/profiles/dpp.jpg' }}" alt="profile picture" height="200" width="170"/>
+                            {% endif %}
+                            <form method="POST" action="{% url 'upload_dp' %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="file" name = 'dp'/>
+                                <button class="btn" style="width:70px; height:40px" type="submit">upload</button>
+                            </form>
+
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -20,67 +48,20 @@
                                     <h6>
                                      {{request.user.email}}
                                     </h6>
-                                    <p class="proile-rating">Total Books : <span>60</span></p>
+                                    <p class="proile-rating">Total Books : <span> 60 </span></p>
                         </div>
                     </div>
                     <div class="col-md-2">
                      <a href="{% url 'logout' %}?next=/login/"> Logout </a><br>
-                     <a href="{% url 'add_book' %}"> Add Book </a><br>
-                        <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/>
+                        <hr>
                     </div>
-                </div>
-                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Experience</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>Expert</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Hourly Rate</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>10$/hr</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Total Projects</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>230</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>English Level</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>Expert</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Availability</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>6 months</p>
-                                            </div>
-                                        </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <label>Your Bio</label><br/>
-                                        <p>Your detail description</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
 
+                </div>
+
+        </div>
+        <div class="container">
+                         <a href="{% url 'add_book' %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add Book</a>
+                        <br><br>
+                        <a href="{% url 'add_book' %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add Reading Progress</a>
+                    </div>
 {% endblock %}

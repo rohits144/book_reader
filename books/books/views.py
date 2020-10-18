@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 from .forms import RegistrationForm, AddBookForm
 from django.http import HttpResponseRedirect
-from django.shortcuts import reverse
+from django.contrib import messages
+from django.http import HttpResponseBadRequest
+from .forms import UpdateDp
+
 import logging
 
 logger = logging.getLogger('__name__')
@@ -21,6 +24,7 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'User registered successfully, Please log in now')
             return HttpResponseRedirect(redirect_to=reverse('login'))
         else:
             logger.info('User registered successfully')
@@ -29,8 +33,10 @@ def register(request):
 
 def profile(request):
     if request.user.is_authenticated:
-        return render(request, template_name='books/profile.html', context={'user': request.user})
+        form = UpdateDp()
+        return render(request, template_name='books/profile.html', context={'user': request.user, 'form': form})
     else:
+        messages.warning(request, 'First login to view your profile')
         return HttpResponseRedirect(redirect_to=reverse('login'))
 
 
@@ -50,3 +56,28 @@ def add_book(request):
         else:
             logger.error("Error in form {}".format(form.errors))
             return HttpResponseRedirect(redirect_to=reverse('add_book'))
+
+
+def upload_dp(request):
+    if request.method == "GET":
+        return HttpResponseBadRequest
+    elif request.method == "POST":
+        if request.user.is_authenticated:
+            form = UpdateDp(request.POST, request.FILES)
+            if form.is_valid():
+                obj = form.save(commit=False)
+                obj.user = request.user
+                obj.save()
+                logger.info("Profile picture updated")
+                messages.success(request, 'Profile picture updated')
+                return HttpResponseRedirect(redirect_to=reverse('profile'))
+            else:
+                logger.error("for is not valid {}".format(form.errors))
+                messages.error(request, 'Invalid form submission')
+                return HttpResponseRedirect(redirect_to=reverse('profile'))
+        else:
+            logger.error("user not authenticated")
+            return HttpResponseRedirect(redirect_to=reverse('login'))
+    else:
+        logger.error("Method {} not allowed in upload_dp api".format(request.method))
+        return HttpResponseBadRequest

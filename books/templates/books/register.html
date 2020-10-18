@@ -1,12 +1,19 @@
 {% extends "books/base.html" %}
-{% load crispy_forms_tags %}
 
 {% block content %}
+<br>
+    <center>
+                <a href="/"> Visit homepage </a>
+                </center>
+        <hr>
     <div>
+        <center>
         <form method="post">
         {% csrf_token %}
-        {{ form|crispy }}
+            <table> {{ form.as_table }} </table>
+            <br>
         <button type="submit" class="btn btn-primary">Sign in</button>
         </form>
+        </center>
     </div>
 {% endblock %}
