@@ -1,2 +1,4 @@
 /venv/
+/static/
 /books/db.sqlite3
+/books/static/
