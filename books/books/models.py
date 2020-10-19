@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import logging
+from datetime import datetime
 
 logger = logging.getLogger()
 
@@ -72,10 +73,10 @@ def create_author(sender, instance, created, **kwargs):
 
 
 class Progress(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    book = models.OneToOneField(Book, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.DO_NOTHING)
     pages_read = models.PositiveIntegerField(verbose_name='total number of pages read', editable=True, blank=False)
-    occured_at = models.DateTimeField(auto_now_add=True)
+    progress_date = models.DateTimeField(blank=False, null=False, default=datetime.now)
     modified_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):

@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+import matplotlib.pyplot as plt
 from django.shortcuts import render, reverse
 from django.contrib.auth.models import User
 from .forms import RegistrationForm, AddBookForm
@@ -5,7 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.http import HttpResponseBadRequest
 from .forms import UpdateDp, AddProgress
-from . models import Book, Profile
+from .models import Book, Profile, Progress
 
 import logging
 
@@ -62,7 +64,6 @@ def add_book(request):
 
 
 def upload_dp(request):
-
     if request.method == "POST":
         if request.user.is_authenticated:
             form = UpdateDp(request.POST, request.FILES)
@@ -86,7 +87,6 @@ def upload_dp(request):
 
 
 def add_progress(request):
-
     if request.method == 'GET':
         form = AddProgress()
         return render(request, template_name="books/add_progress.html", context={'form': form})
@@ -99,11 +99,37 @@ def add_progress(request):
             logger.info("Progress Created")
             messages.success(request, 'Progress Created')
             return HttpResponseRedirect(redirect_to=reverse('profile'))
+        else:
+            logger.error("Form error - {}".format(form.errors))
 
 
 def books_list_view(request):
-
     if request.method == 'GET':
         if request.user.is_authenticated:
             users_books = Book.objects.filter(user=request.user)
             return render(request, template_name="books/book_list.html", context={'records': users_books})
+
+
+def progress_view(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            todays_date = datetime.now().date()
+            start_date = todays_date - timedelta(days=7)
+            progress_detail = Progress.objects.filter(user=request.user, progress_date__gte=start_date).order_by(
+                'progress_date')
+            graph_dict = {}
+            for progress in progress_detail:
+                date = str(progress.progress_date).split(" ")[0]
+                if date in graph_dict.keys():
+                    graph_dict[date] = int(graph_dict[date]) + int(progress.pages_read)
+                else:
+                    graph_dict[date] = int(progress.pages_read)
+
+            plt.bar(*zip(*graph_dict.items()))
+            plot = "static/plot/" + request.user.username + '.png'
+            plt.savefig(plot)
+            plot = "/".join(plot.split("/")[1:])
+            print(plot)
+            return render(request, template_name="books/plot.html", context={'plot': plot})
+        else:
+            print("$$$$ - not authenticated")

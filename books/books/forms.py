@@ -23,4 +23,4 @@ class UpdateDp(forms.ModelForm):
 class AddProgress(forms.ModelForm):
     class Meta:
         model = Progress
-        fields = ['book', 'pages_read']
+        fields = ['book', 'pages_read', 'progress_date']
