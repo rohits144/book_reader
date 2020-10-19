@@ -10,8 +10,11 @@ table {
 
 th, td {
   padding: 8px;
+  text-align: center;
+}
+
+ul {
   text-align: left;
-  border-bottom: 1px solid #ddd;
 }
 
 </style>
@@ -28,27 +31,26 @@ th, td {
     <div class="row">
         <table class="col-md-12">
             <tr>
-                <th>
+                <th class="col-md-4">
                     <h5 align="left"> Book's Image </h5>
                 </th>
-                <th>
-                    <h5 align="left"> Book's Detail </h5>
+                <th class="col-md-8">
+                    <h5 align="center"> Book's Detail </h5>
                 </th>
             </tr>
             {% for book in records %}
                 <tr>
                     <td>
-                        <img src="{{ book.book_image.url }}" alt="Book image" height="200" width="170"/>
+                        <img src="{{ book.book_image.url }}" alt="Book image" height="200" width="170" align="left"/>
                     </td>
                     <td>
-                        <div class="row">
-                            <div class="col">
-                                <b> {{ book.title| title }} </b>
-                            </div>
-                            <div class="col">
-                                <b> by - {{ book.author_obj.name| title}} </b>
-                            </div>
-                        </div>
+                        <ul style="list-style-type: none;">
+                            <li><b> Name -  {{ book.title| title }} </b></li>
+                            <li><b> Author -  {{ book.author_obj.name| title}} </b></li>
+                            <li><b> Status -  {{ book.status }} </b></li>
+                            <li><b> Genre - {{ book.genre }} </b></li>
+                            <li><b> Total pages - {{ book.total_pages }} </b></li>
+                        </ul>
                     </td>
                 </tr>
             {% endfor %}
