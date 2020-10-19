@@ -1,9 +1,11 @@
 from django.shortcuts import render, reverse
+from django.contrib.auth.models import User
 from .forms import RegistrationForm, AddBookForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.http import HttpResponseBadRequest
 from .forms import UpdateDp, AddProgress
+from . models import Book, Profile
 
 import logging
 
@@ -47,11 +49,12 @@ def add_book(request):
         return render(request, template_name='books/add_book.html', context={'form': form})
     elif request.method == 'POST':
         logger.info('Post method called to submit form')
-        form = AddBookForm(request.POST)
+        form = AddBookForm(request.POST, request.FILES)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.user = request.user
             obj.save()
+            messages.success(request, "Book Added")
             return HttpResponseRedirect(redirect_to=reverse('profile'))
         else:
             logger.error("Error in form {}".format(form.errors))
@@ -96,3 +99,11 @@ def add_progress(request):
             logger.info("Progress Created")
             messages.success(request, 'Progress Created')
             return HttpResponseRedirect(redirect_to=reverse('profile'))
+
+
+def books_list_view(request):
+
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            users_books = Book.objects.filter(user=request.user)
+            return render(request, template_name="books/book_list.html", context={'records': users_books})

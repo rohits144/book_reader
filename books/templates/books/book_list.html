@@ -1,0 +1,59 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <center> <h3> Your Books </h3></center>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'profile' %}"> <h4> Profile </h4> </a>
+        </div>
+    </div>
+    <div class="row">
+        <table class="col-md-12">
+            <tr>
+                <th>
+                    <h5 align="left"> Book's Image </h5>
+                </th>
+                <th>
+                    <h5 align="left"> Book's Detail </h5>
+                </th>
+            </tr>
+            {% for book in records %}
+                <tr>
+                    <td>
+                        <img src="{{ book.book_image.url }}" alt="Book image" height="200" width="170"/>
+                    </td>
+                    <td>
+                        <div class="row">
+                            <div class="col">
+                                <b> {{ book.title| title }} </b>
+                            </div>
+                            <div class="col">
+                                <b> by - {{ book.author_obj.name| title}} </b>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}

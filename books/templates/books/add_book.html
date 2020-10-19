@@ -7,7 +7,7 @@
 <br>
     <H3 style="text-align:center"> Add the book you want to track your progress </H3>
 <hr>
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <center>
         <table>  {{ form.as_table}}   </table>

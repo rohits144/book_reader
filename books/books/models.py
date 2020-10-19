@@ -10,6 +10,8 @@ logger = logging.getLogger()
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     display_pic = models.ImageField(upload_to='profiles', verbose_name='profile picture', blank=True)
+    total_books = models.PositiveIntegerField(verbose_name='Total number of books for user', editable=True, default=0)
+    curr_no_books = models.PositiveIntegerField(verbose_name='Number of books Currently reading', editable=True, default=0)
 
     def __str__(self):
         return self.user.username
@@ -36,7 +38,7 @@ class Book(models.Model):
     title = models.CharField(max_length=30)
     book_image = models.ImageField(upload_to='books', verbose_name='book image', blank=True)
     isbn_num = models.CharField(max_length=30, blank=True)
-    total_pages = models.PositiveIntegerField(verbose_name='Total number of pages in book', editable=True, blank=True, )
+    total_pages = models.PositiveIntegerField(verbose_name='Total number of pages in book', editable=True, blank=True)
     author = models.CharField(max_length=100)
     author_obj = models.ForeignKey(Author, on_delete=models.DO_NOTHING, blank=True, null=True)
     genre = models.CharField(max_length=20, blank=True)
@@ -50,6 +52,8 @@ class Book(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
+        if self.book_image == "":
+            self.book_image = "books/b1.jpg"
         super(Book, self).save(*args, **kwargs)
 
 
