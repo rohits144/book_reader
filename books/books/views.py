@@ -3,7 +3,7 @@ from .forms import RegistrationForm, AddBookForm
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.http import HttpResponseBadRequest
-from .forms import UpdateDp
+from .forms import UpdateDp, AddProgress
 
 import logging
 
@@ -81,3 +81,19 @@ def upload_dp(request):
     else:
         logger.error("Method {} not allowed in upload_dp api".format(request.method))
         return HttpResponseBadRequest
+
+
+def add_progress(request):
+
+    if request.method == 'GET':
+        form = AddProgress()
+        return render(request, template_name="books/add_progress.html", context={'form': form})
+    elif request.method == 'POST':
+        form = AddProgress(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
+            logger.info("Progress Created")
+            messages.success(request, 'Progress Created')
+            return HttpResponseRedirect(redirect_to=reverse('profile'))

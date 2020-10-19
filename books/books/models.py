@@ -56,3 +56,6 @@ class Progress(models.Model):
     pages_read = models.PositiveIntegerField(verbose_name='total number of pages read', editable=True, blank=False)
     occured_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.username + "'s " + self.book.title + "'s " + "Progress"

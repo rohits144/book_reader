@@ -16,7 +16,7 @@
                 <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
                         {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}<p class="text-danger" >Warning: </p>{% endif %}
-                            {{ message }}
+                    <center>{{ message }}</center>
                 </li>
           {% endfor %}
     </ul>
@@ -62,6 +62,6 @@
         <div class="container">
                          <a href="{% url 'add_book' %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add Book</a>
                         <br><br>
-                        <a href="{% url 'add_book' %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add Reading Progress</a>
+                        <a href="{% url 'add_progress' %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add Reading Progress</a>
                     </div>
 {% endblock %}

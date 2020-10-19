@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Book, Profile
+from .models import Book, Profile, Progress
 
 
 class RegistrationForm(UserCreationForm):
@@ -18,3 +18,9 @@ class UpdateDp(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['display_pic']
+
+
+class AddProgress(forms.ModelForm):
+    class Meta:
+        model = Progress
+        fields = ['book', 'pages_read']
