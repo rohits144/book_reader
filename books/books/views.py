@@ -59,9 +59,8 @@ def add_book(request):
 
 
 def upload_dp(request):
-    if request.method == "GET":
-        return HttpResponseBadRequest
-    elif request.method == "POST":
+
+    if request.method == "POST":
         if request.user.is_authenticated:
             form = UpdateDp(request.POST, request.FILES)
             if form.is_valid():

@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import logging
+
 logger = logging.getLogger()
 
 
@@ -35,11 +36,13 @@ class Book(models.Model):
     title = models.CharField(max_length=30)
     book_image = models.ImageField(upload_to='books', verbose_name='book image', blank=True)
     isbn_num = models.CharField(max_length=30, blank=True)
-    total_pages = models.PositiveIntegerField(verbose_name='Total number of pages in book', editable=True, blank=True,)
+    total_pages = models.PositiveIntegerField(verbose_name='Total number of pages in book', editable=True, blank=True, )
     author = models.CharField(max_length=100)
+    author_obj = models.ForeignKey(Author, on_delete=models.DO_NOTHING, blank=True, null=True)
     genre = models.CharField(max_length=20, blank=True)
     language = models.CharField(max_length=20, blank=True)
-    status = models.CharField(max_length=100, choices=(('Want to read', 'Not started'), ('Currently reading', 'Reading'), ('Completed reading', 'Completed')))
+    status = models.CharField(max_length=100, choices=(
+    ('Want to read', 'Not started'), ('Currently reading', 'Reading'), ('Completed reading', 'Completed')))
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
@@ -48,6 +51,20 @@ class Book(models.Model):
 
     def save(self, *args, **kwargs):
         super(Book, self).save(*args, **kwargs)
+
+
+@receiver(post_save, sender=Book)
+def create_author(sender, instance, created, **kwargs):
+    if created:
+        if len(Author.objects.filter(name__iexact=instance.author)) > 0:
+            logger.info("Author already exist, No need to create again")
+            instance.author_obj = Author.objects.get(name__iexact=instance.author)
+            instance.save()
+        else:
+            obj = Author.objects.create(name=instance.author, author_image='profiles/dpp.jpg')
+            instance.author_obj = obj
+            instance.save()
+    logger.info("Author created successfully for {}".format(instance.author))
 
 
 class Progress(models.Model):

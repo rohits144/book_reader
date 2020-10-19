@@ -11,7 +11,7 @@ class RegistrationForm(UserCreationForm):
 class AddBookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['title', 'book_image', 'total_pages', 'author', 'genre', 'language', 'status']
+        fields = ['isbn_num', 'title', 'book_image', 'total_pages', 'author', 'genre', 'language', 'status']
 
 
 class UpdateDp(forms.ModelForm):

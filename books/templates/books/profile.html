@@ -1,3 +1,4 @@
+{% extends "books/base.html" %}
 {% block content %}
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -27,15 +28,15 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="profile-img">
-                            {% if user.profile.display_pic%}
+                            {% if user.profile.display_pic.url %}
                                 <img src="{{user.profile.display_pic.url}}" alt="profile picture" height="200" width="170"/>
                             {% else %}
                                 <img src="{{'/static/profiles/dpp.jpg' }}" alt="profile picture" height="200" width="170"/>
                             {% endif %}
                             <form method="POST" action="{% url 'upload_dp' %}" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                <input type="file" name = 'dp'/>
-                                <button class="btn" style="width:70px; height:40px" type="submit">upload</button>
+                                {{ form.display_pic}}
+                                <button class="btn" style="width:50px; height:20px" type="submit">upload</button>
                             </form>
 
                         </div>
@@ -59,6 +60,7 @@
                 </div>
 
         </div>
+        <br>
         <div class="container">
                          <a href="{% url 'add_book' %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add Book</a>
                         <br><br>
