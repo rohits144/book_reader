@@ -57,11 +57,18 @@ def add_book(request):
         if form.is_valid():
             obj = form.save(commit=False)
             obj.user = request.user
-            obj.save()
+
+            try:
+                obj.save()
+            except Exception as e:
+                messages.error(request, "Please check if you are adding duplicate book")
+                return HttpResponseRedirect(redirect_to=reverse('add_book'))
+
             messages.success(request, "Book Added")
             return HttpResponseRedirect(redirect_to=reverse('profile'))
         else:
             logger.error("Error in form {}".format(form.errors))
+            messages.error(request, form.errors)
             return HttpResponseRedirect(redirect_to=reverse('add_book'))
 
 

@@ -12,7 +12,6 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     display_pic = models.ImageField(upload_to='profiles', verbose_name='profile picture', blank=True)
     total_books = models.PositiveIntegerField(verbose_name='Total number of books for user', editable=True, default=0)
-    curr_no_books = models.PositiveIntegerField(verbose_name='Number of books Currently reading', editable=True, default=0)
 
     def __str__(self):
         return self.user.username
@@ -49,6 +48,9 @@ class Book(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = ('title', 'isbn_num', 'user')
+
     def __str__(self):
         return self.title
 
@@ -76,8 +78,21 @@ class Progress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.DO_NOTHING)
     pages_read = models.PositiveIntegerField(verbose_name='total number of pages read', editable=True, blank=False)
+    total_books = models.PositiveIntegerField(verbose_name='total books read', default=0, blank=False, null=False)
     progress_date = models.DateTimeField(blank=False, null=False, default=datetime.now)
     modified_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.user.username + "'s " + self.book.title + "'s " + "Progress"
+
+
+@receiver(post_save, sender=Book)
+def update_total_book_count(sender, instance, created, **kwargs):
+    print("@@@@@ - called")
+    if created:
+        if instance.status in ['Completed reading', 'Completed']:
+            logger.info("Book {} completed".format(instance.title))
+            instance.user.profile.total_books += 1
+            instance.user.profile.save()
+        else:
+            print("Created not True")
