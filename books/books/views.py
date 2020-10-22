@@ -127,6 +127,9 @@ def progress_view(request):
             progress_detail = Progress.objects.filter(user=request.user, progress_date__gte=start_date).order_by(
                 'progress_date')
             graph_dict = {}
+            if len(progress_detail) == 0:
+                messages.warning(request, "First add your progress then click on view progress")
+                return HttpResponseRedirect(redirect_to=reverse("profile"))
             for progress in progress_detail:
                 date = str(progress.progress_date).split(" ")[0]
                 if date in graph_dict.keys():
