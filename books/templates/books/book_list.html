@@ -17,7 +17,21 @@ ul {
   text-align: left;
 }
 
+.profile-img-container img:hover {
+  opacity: 0.5;
+  z-index: 501;
+}
+
+.profile-img-container img:hover{
+  display: block;
+  z-index: 500;
+}
 </style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" />
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
 <div class="container">
     <div class="row">
@@ -25,7 +39,7 @@ ul {
             <center> <h3> Your Books </h3></center>
         </div>
         <div class="col-md-3">
-            <a href="{% url 'profile' %}"> <h4> Profile </h4> </a>
+            <a href="{% url 'profile' %}"> <h4> profile </h4> </a>
         </div>
     </div>
     <div class="row">
@@ -41,7 +55,9 @@ ul {
             {% for book in records %}
                 <tr>
                     <td>
-                        <img src="{{ book.book_image.url }}" alt="Book image" height="200" width="170" align="left"/>
+                        <div class="profile-img-container">
+                            <img src="{{ book.book_image.url }}" class="img-responsive" alt="Book image" height="200" width="170" align="left"/>
+                        </div>
                     </td>
                     <td>
                         <ul style="list-style-type: none;">
