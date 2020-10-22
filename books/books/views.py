@@ -8,6 +8,8 @@ from django.contrib import messages
 from django.http import HttpResponseBadRequest
 from .forms import UpdateDp, AddProgress
 from .models import Book, Profile, Progress
+from django.conf import settings
+import os
 
 import logging
 
@@ -126,10 +128,11 @@ def progress_view(request):
                     graph_dict[date] = int(progress.pages_read)
 
             plt.bar(*zip(*graph_dict.items()))
-            plot = "static/plot/" + request.user.username + '.png'
+            file = request.user.username + '.jpg'
+            plot = os.path.join(settings.BASE_DIR, "static/plot/") + file
             plt.savefig(plot)
-            plot = "/".join(plot.split("/")[1:])
+            plot = "/static/plot/" + file
             logger.info("@@@@ - File location - {}".format(plot))
             return render(request, template_name="books/plot.html", context={'plot': plot})
         else:
-            print("$$$$ - not authenticated")
+            logger.error("$$$$ - User not authenticated")
