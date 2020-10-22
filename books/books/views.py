@@ -127,6 +127,9 @@ def progress_view(request):
                 else:
                     graph_dict[date] = int(progress.pages_read)
 
+            plt.xlabel("date")
+            plt.ylabel("  no of pages read  ")
+            plt.title("  weekly stats  ")
             plt.bar(*zip(*graph_dict.items()))
             file = request.user.username + '.jpg'
             plot = os.path.join(settings.BASE_DIR, "static/plot/") + file

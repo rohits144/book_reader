@@ -1,7 +1,15 @@
 {% extends "books/base.html" %}
 {% load static %}
 {% block content %}
+<div class="container">
+    <br>
+   <center>
+           <a href="{% url 'profile' %}"> profile </a>
+   </center>
+    <hr>
 
-    <img src="{{ plot }}"  alt="plot" />
+
+        <center><img src="{{ plot }}"  alt="plot" align="center"/></center>
+</div>
 
 {% endblock %}
