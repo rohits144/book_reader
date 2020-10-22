@@ -129,7 +129,7 @@ def progress_view(request):
             plot = "static/plot/" + request.user.username + '.png'
             plt.savefig(plot)
             plot = "/".join(plot.split("/")[1:])
-            print(plot)
+            logger.info("@@@@ - File location - {}".format(plot))
             return render(request, template_name="books/plot.html", context={'plot': plot})
         else:
             print("$$$$ - not authenticated")
