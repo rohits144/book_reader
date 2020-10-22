@@ -132,9 +132,9 @@ def progress_view(request):
             plt.title("  weekly stats  ")
             plt.bar(*zip(*graph_dict.items()))
             file = request.user.username + '.jpg'
-            plot = os.path.join(settings.BASE_DIR, "static/plot/") + file
+            plot = os.path.join(settings.BASE_DIR, "media/plot/") + file
             plt.savefig(plot)
-            plot = "/static/plot/" + file
+            plot = "/media/plot/" + file
             logger.info("@@@@ - File location - {}".format(plot))
             return render(request, template_name="books/plot.html", context={'plot': plot})
         else:
