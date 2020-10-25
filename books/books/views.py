@@ -9,6 +9,7 @@ from django.http import HttpResponseBadRequest
 from .forms import UpdateDp, AddProgress
 from .models import Book, Profile, Progress
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 import os
 
 import logging
@@ -149,3 +150,20 @@ def progress_view(request):
             return render(request, template_name="books/plot.html", context={'plot': plot})
         else:
             logger.error("$$$$ - User not authenticated")
+
+
+def delete_book(request, id):
+    if request.user.is_authenticated:
+        try:
+            book = Book.objects.get(id=id)
+        except ObjectDoesNotExist as e:
+            logger.error("Book object not fount for deletion")
+            messages.error("Book not found for deletion")
+            return HttpResponseRedirect(redirect_to=reverse("book_list"))
+        else:
+            book.delete()
+            messages.success(request, "Book deleted")
+            return HttpResponseRedirect(redirect_to=reverse('book_list'))
+    else:
+        messages.error(request, "First login to delete book")
+        return HttpResponseRedirect(redirect_to=reverse('login'))

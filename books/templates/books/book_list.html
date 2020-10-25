@@ -1,5 +1,5 @@
 {% extends "books/base.html" %}
-
+{% load static %}
 {% block content %}
 <div class="container">
 <style>
@@ -42,14 +42,30 @@ ul {
             <a href="{% url 'profile' %}"> <h4> profile </h4> </a>
         </div>
     </div>
+
+    {% if messages %}
+                <ul class="messages">
+                 {% for message in messages %}
+                         <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                                        {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}<p class="text-danger" >Warning: </p>{% endif %}
+                                                {{ message }}
+                        </li>
+                {% endfor %}
+                </ul>
+        {% endif %}
+
     <div class="row">
         <table class="col-md-12">
             <tr>
                 <th class="col-md-4">
                     <h5 align="left"> Book's Image </h5>
                 </th>
-                <th class="col-md-8">
+                <th class="col-md-6">
                     <h5 align="center"> Book's Detail </h5>
+                </th>
+                <th class="col-md-2">
+                    <h5 align="center"> Delete books </h5>
                 </th>
             </tr>
             {% for book in records %}
@@ -68,6 +84,7 @@ ul {
                             <li><b> Total pages - {{ book.total_pages }} </b></li>
                         </ul>
                     </td>
+                    <td> <a href="{% url 'delete_book' book.id %}" > <img src="{% static 'delete.png' %}" height="20", width="20"/> </a></td>
                 </tr>
             {% endfor %}
         </table>
