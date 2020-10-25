@@ -66,7 +66,7 @@ def add_book(request):
                 return HttpResponseRedirect(redirect_to=reverse('add_book'))
 
             messages.success(request, "Book Added")
-            return HttpResponseRedirect(redirect_to=reverse('profile'))
+            return HttpResponseRedirect(redirect_to=reverse('book_list'))
         else:
             logger.error("Error in form {}".format(form.errors))
             messages.error(request, form.errors)
