@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from django.contrib.auth import views as auth_views
-from .views import index_view, register, profile, add_book, upload_dp, add_progress, books_list_view, progress_view, delete_book
+from .views import index_view, register, profile, add_book, upload_dp, add_progress, books_list_view, progress_view, delete_book, privacy_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -19,6 +19,7 @@ urlpatterns = [
     path('book_list/', books_list_view, name='book_list'),
     path('progress_view/', progress_view, name='progress_view'),
     path('delete_book/<int:id>', delete_book, name='delete_book'),
+    path('privacy/', privacy_page, name='privacy_page'),
 ]
 
 if settings.DEBUG:

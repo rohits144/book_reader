@@ -167,3 +167,7 @@ def delete_book(request, id):
     else:
         messages.error(request, "First login to delete book")
         return HttpResponseRedirect(redirect_to=reverse('login'))
+
+
+def privacy_page(request):
+    return render(request, template_name="books/privacy.html")
